@@ -4,6 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="robots" content="noindex, nofollow" />
+<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-KBFBNCDT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+</script>
 <meta name="snowflake-source" content="cortex-agent-authored" />
 <title>Test landing page</title>
 <script type="application/json" id="snowflake-report-metadata">
@@ -53,12 +59,12 @@
 <body>
 
 <h1>Test landing page</h1>
-<p class="muted">Final URL for a Google Ads test account. This page is a static stand-in: there is no product, no form and no tracking script.</p>
+<p class="muted">Final URL for a Google Ads test account. This page is a static stand-in: there is no product and no form. It loads a Google tag (GTM-KBFBNCDT).</p>
 
 <div class="banner" id="status" role="status"><strong>Page loaded.</strong> <span id="status-text"></span></div>
 
 <h2 id="received">Parameters received</h2>
-<p class="muted">Read in your browser from the address bar. Nothing is sent anywhere or stored.</p>
+<p class="muted">Read in your browser from the address bar. This page's own code does not store or send these values, but the Google tag loaded above may receive the page URL.</p>
 <div class="table-wrap">
   <table>
     <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
