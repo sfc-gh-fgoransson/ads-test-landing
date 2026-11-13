@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="snowflake-source" content="cortex-agent-authored" />
+<title>Test landing page</title>
+<script type="application/json" id="snowflake-report-metadata">
+{
+  "generated": "2026-11-13",
+  "intent": "Static test landing page for Google Ads test-account click-throughs. Shows the query parameters received. No data sources.",
+  "sections": [
+    { "id": "received", "title": "Parameters received" }
+  ]
+}
+</script>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: light-dark(#ffffff, #0b1120);
+    --fg: light-dark(#1f2937, #e5e7eb);
+    --head: light-dark(#0f172a, #f1f5f9);
+    --muted: light-dark(#4b5563, #94a3b8);
+    --line: light-dark(#cbd5e1, #334155);
+    --card: light-dark(#f8fafc, #111827);
+    --accent: light-dark(#0b6bcb, #5aa9f0);
+    --good: light-dark(#0f7b45, #4ade80);
+  }
+  html { background: var(--bg); }
+  body {
+    font-family: -apple-system, system-ui, "Segoe UI", sans-serif;
+    max-width: 720px; width: 100%; box-sizing: border-box;
+    margin: 0 auto; padding: clamp(16px, 5vw, 40px);
+    background: var(--bg); color: var(--fg); line-height: 1.55;
+  }
+  h1 { color: var(--head); font-size: clamp(26px, 5vw, 36px); margin: 0 0 8px; }
+  h2 { color: var(--head); font-size: 18px; margin: 32px 0 8px; }
+  p { margin: 0 0 12px; }
+  .muted { color: var(--muted); font-size: 14px; }
+  .banner { border: 1px solid var(--line); background: var(--card); border-radius: 10px; padding: 14px 16px; margin: 20px 0; }
+  .banner strong { color: var(--good); }
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { border: 1px solid var(--line); padding: 7px 10px; text-align: left; vertical-align: top; }
+  th { background: var(--card); color: var(--head); font-weight: 600; }
+  td.k { white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+  td.v { overflow-wrap: anywhere; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 13px; }
+  td.none { color: var(--muted); }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<h1>Test landing page</h1>
+<p class="muted">Final URL for a Google Ads test account. This page is a static stand-in: there is no product, no form and no tracking script.</p>
+
+<div class="banner" id="status" role="status"><strong>Page loaded.</strong> <span id="status-text"></span></div>
+
+<h2 id="received">Parameters received</h2>
+<p class="muted">Read in your browser from the address bar. Nothing is sent anywhere or stored.</p>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Parameter</th><th>Value</th></tr></thead>
+    <tbody id="params"></tbody>
+  </table>
+</div>
+
+<h2>Request details</h2>
+<div class="table-wrap">
+  <table>
+    <tbody id="details"></tbody>
+  </table>
+</div>
+
+<script>
+  (function () {
+    var known = ['gclid', 'gbraid', 'wbraid', 'gad_source', 'gad_campaignid',
+                 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'utm_id'];
+    var query = new URLSearchParams(window.location.search);
+
+    function row(tbody, key, value, missing) {
+      var tr = document.createElement('tr');
+      var k = document.createElement('td');
+      var v = document.createElement('td');
+      k.className = 'k';
+      v.className = missing ? 'v none' : 'v';
+      k.textContent = key;
+      v.textContent = value;
+      tr.appendChild(k);
+      tr.appendChild(v);
+      tbody.appendChild(tr);
+    }
+
+    var params = document.getElementById('params');
+    known.forEach(function (name) {
+      var value = query.get(name);
+      row(params, name, value === null ? 'not present' : value, value === null);
+    });
+    query.forEach(function (value, name) {
+      if (known.indexOf(name) === -1) row(params, name, value, false);
+    });
+
+    var details = document.getElementById('details');
+    row(details, 'Loaded at (UTC)', new Date().toISOString(), false);
+    row(details, 'Referrer', document.referrer || 'none (direct, or the referrer was stripped)', !document.referrer);
+    row(details, 'Path', window.location.pathname, false);
+
+    var hasClickId = query.has('gclid') || query.has('gbraid') || query.has('wbraid');
+    document.getElementById('status-text').textContent = hasClickId
+      ? 'A Google click ID was received, so auto-tagging reached this page.'
+      : 'No Google click ID in the URL. Expected if you opened the page directly; for an ad click, check that auto-tagging is on.';
+  })();
+</script>
+
+</body>
+</html>
